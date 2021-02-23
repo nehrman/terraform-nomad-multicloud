@@ -19,13 +19,8 @@ sudo apt-get install -y software-properties-common unzip tree redis-tools jq cur
 
 CONFIGDIR=/ops/config
 
-CONSULVERSION=$(curl -s https://checkpoint-api.hashicorp.com/v1/check/consul | jq -r '.current_version')
-CONSULDOWNLOAD=https://releases.hashicorp.com/consul/${CONSULVERSION}+ent/consul_${CONSULVERSION}+ent_linux_amd64.zip
-CONSULCONFIGDIR=/etc/consul.d
-CONSULDIR=/opt/consul
-
 NOMADVERSION=$(curl -s https://checkpoint-api.hashicorp.com/v1/check/nomad | jq -r '.current_version')
-NOMADDOWNLOAD=https://releases.hashicorp.com/nomad/${NOMADVERSION}+ent/nomad_${NOMADVERSION}+ent_linux_amd64.zip
+NOMADDOWNLOAD=https://releases.hashicorp.com/nomad/${NOMADVERSION}/nomad_${NOMADVERSION}+ent_linux_amd64.zip
 NOMADCONFIGDIR=/etc/nomad.d
 NOMADDIR=/opt/nomad
 
@@ -35,20 +30,6 @@ NOMADDIR=/opt/nomad
 
 # Disable the firewall
 sudo ufw disable || echo "ufw not installed"
-
-# Consul
-curl -sL -o consul.zip ${CONSULDOWNLOAD}
-
-## Install
-sudo unzip consul.zip -d /usr/local/bin
-sudo chmod 0755 /usr/local/bin/consul
-sudo chown root:root /usr/local/bin/consul
-
-## Configure
-sudo mkdir -p ${CONSULCONFIGDIR}
-sudo chmod 755 ${CONSULCONFIGDIR}
-sudo mkdir -p ${CONSULDIR}
-sudo chmod 755 ${CONSULDIR}
 
 # Nomad
 curl -sL -o nomad.zip ${NOMADDOWNLOAD}

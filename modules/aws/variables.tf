@@ -23,7 +23,7 @@ variable "region" {
 variable "availability_zones" {
   description = "The AWS region AZs to deploy into."
   type        = list(string)
-  default     = ["eu-west-1a"]
+  default     = ["eu-west-1a","eu-west-1b","eu-west-1c"]
 }
 
 variable "vpc_id" {

@@ -3,11 +3,6 @@ job "autoscaler" {
 
   group "autoscaler" {
     count = 1
-    network {
-      port "http" {
-        static = 8080
-      }
-    }
 
     task "autoscaler" {
       driver = "docker"
@@ -28,9 +23,9 @@ job "autoscaler" {
           "${NOMAD_TASK_DIR}/policies/",
         ]
 
-        ports = [
-          "http"
-        ]
+        port_map {
+          http = 8080
+        }
       }
 
       template {
@@ -42,7 +37,7 @@ nomad {
 apm "prometheus" {
   driver = "prometheus"
   config = {
-    address = "http://172.31.13.209:9090"
+    address = "http://{{ range service "prometheus" }}{{ .Address }}:{{ .Port }}{{ end }}"
   }
 }
 
@@ -141,6 +136,19 @@ EOF
 
         network {
           mbits = 10
+          port "http" {}
+        }
+      }
+
+      service {
+        name = "autoscaler"
+        port = "http"
+
+        check {
+          type     = "http"
+          path     = "/v1/health"
+          interval = "5s"
+          timeout  = "2s"
         }
       }
     }

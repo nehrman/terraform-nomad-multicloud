@@ -1,3 +1,8 @@
+####
+#
+# AWS Variables  
+#
+#
 
 variable "aws_region" {
   type = string
@@ -14,6 +19,39 @@ variable "owner" {
   default = "neh"
 }
 
+variable "client_id" {
+  default = ""
+}
+variable "client_secret" {
+  default = ""
+}
+
+variable "resource_group" {
+  type = string
+  default = "neh-packer-build"
+}
+
+variable "subscription_id" {
+  default = ""
+}
+
+variable "tenant_id" {
+  default = ""
+}
+
+variable "location" { 
+  type = string
+  default = "West Europe" 
+}
+
+variable "image_name" { default = "nomad" }
+
+####################
+#                  #
+# Common Variables #
+#                  #
+####################
+
 variable "created_email" {
   type = string
   default = "nehrman@hashicorp.com"
@@ -23,7 +61,8 @@ variable "created_name" {
   default = "neh  "
 }
 
-# Looking for the source image on which to pack my new image
+
+# CREATING AWS NOMAD / CONNSUL PACKER IMAGE 
 source "amazon-ebs" "ubuntu-image" {
   ami_name = "${var.owner}_{{timestamp}}"
   region = "${var.aws_region}"
@@ -74,26 +113,18 @@ build {
   }
 }
 
-variable "client_id" {}
-variable "client_secret" {}
 
-variable "resource_group" {
-  type = string
-  default = "neh-packer-build"
-}
-
-variable "subscription_id" {}
-
-variable "location" { 
-  type = string
-  default = "West Europe" }
-
-variable "image_name" { default = "nomad" }
+# CREATING AZURERM NOMAD / CONNSUL PACKER IMAGE
 
 source "azure-arm" "ubuntu-image" {
   azure_tags = {
-    Product = "Hashistack"
+    OS_Version    = "Ubuntu"
+    Release       = "18.04"
+    Architecture  = "amd64"
+    Created_Email = var.created_email
+    Created_Name  = var.created_name
   }
+
   client_id                         = "${var.client_id}"
   client_secret                     = "${var.client_secret}"
   image_offer                       = "UbuntuServer"
@@ -120,11 +151,11 @@ build {
   }
 
   provisioner "file" {
-    source      = "../shared/packer/"
+    source      = "../shared/"
     destination = "/ops"
   }
 
   provisioner "shell" {
-    script = "../shared/packer/scripts/setup.sh"
+    script = "../shared/scripts/setup.sh"
   }
 }
