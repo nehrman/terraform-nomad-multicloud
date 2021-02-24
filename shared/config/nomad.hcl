@@ -1,6 +1,8 @@
-data_dir  = "/opt/nomad/data"
-bind_addr = "0.0.0.0"
-log_level = "DEBUG"
+region     = "REGION"
+datacenter = "DATACENTER"
+data_dir   = "/opt/nomad/data"
+bind_addr  = "0.0.0.0"
+log_level  = "DEBUG"
 
 telemetry {
   publish_allocation_metrics = true

@@ -4,12 +4,6 @@ job "grafana" {
   group "grafana" {
     count = 1
 
-    network {
-        port "grafana_ui" {
-          static = 3000
-        }
-    }
-
     task "grafana" {
 
       template {
@@ -730,10 +724,11 @@ EOF
           "local/dashboard.json:/var/lib/grafana/dashboards/default/dashboard.json",
           "local/dashboard.yaml:/etc/grafana/provisioning/dashboards/dashboard.yaml",
         ]
-        ports = [
-            "grafana_ui" 
-        ]
-      }
+
+        port_map {
+          grafana_ui = 3000
+        }
+      }      
 
       env {
         GF_AUTH_ANONYMOUS_ENABLED  = "true"
@@ -747,7 +742,7 @@ datasources:
 - name: Prometheus
   type: prometheus
   access: proxy
-  url: http://172.31.13.209:9090
+  url: http://prometheus.service.consul:9090
   isDefault: true
   version: 1
   editable: false
@@ -756,12 +751,24 @@ EOH
         destination = "local/datasources/prometheus.yaml"
       }
 
+
       resources {
         cpu    = 100
         memory = 64
         network {
           mbits = 10
+          port "grafana_ui" {}
         }
+      }
+      service {
+        name = "grafana"
+        port = "grafana_ui"
+
+        tags = [
+            "traefik.enable=true",
+            "traefik.tcp.routers.grafana.entrypoints=grafana",
+            "traefik.tcp.routers.grafana.rule=HostSNI(`*`)"
+        ]
       }
     }
   }

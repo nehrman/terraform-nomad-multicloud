@@ -31,6 +31,7 @@ fi
 sed -i "s/IP_ADDRESS/$IP_ADDRESS/g" $CONFIGDIR/consul.hcl
 sed -i "s/SERVER_COUNT/$SERVER_COUNT/g" $CONFIGDIR/consul.hcl
 sed -i "s/RETRY_JOIN/$RETRY_JOIN/g" $CONFIGDIR/consul.hcl
+sed -i "s/DATACENTER/$DATACENTER/g" $CONFIGDIR/consul.hcl
 sudo cp $CONFIGDIR/consul.hcl $CONSULCONFIGDIR
 sudo cp $CONFIGDIR/consul_$CLOUD.service /etc/systemd/system/consul.service
 
@@ -50,6 +51,8 @@ if [[ `wget -S --spider $NOMAD_BINARY  2>&1 | grep 'HTTP/1.1 200 OK'` ]]; then
 fi
 
 sed -i "s/SERVER_COUNT/$SERVER_COUNT/g" $CONFIGDIR/nomad.hcl
+sed -i "s/REGION/$REGION/g" $CONFIGDIR/nomad.hcl
+sed -i "s/DATACENTER/$DATACENTER/g" $CONFIGDIR/nomad.hcl
 sudo cp $CONFIGDIR/nomad.hcl $NOMADCONFIGDIR
 sudo cp $CONFIGDIR/nomad.service /etc/systemd/system/nomad.service
 

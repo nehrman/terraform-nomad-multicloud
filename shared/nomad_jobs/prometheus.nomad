@@ -4,12 +4,6 @@ job "prometheus" {
   group "prometheus" {
     count = 1
 
-    network {
-        port "prometheus_ui" {
-            static = 9090
-        }
-    }
-
     task "prometheus" {
       driver = "docker"
 
@@ -26,9 +20,10 @@ job "prometheus" {
         volumes = [
           "local/config:/etc/prometheus/config",
         ]
-        ports = [
-          "prometheus_ui"
-        ]
+
+        port_map {
+          prometheus_ui = 9090
+        }
       }
 
       template {
@@ -45,6 +40,19 @@ scrape_configs:
     metrics_path: /v1/metrics
     params:
       format: ['prometheus']
+    consul_sd_configs:
+    - server: '{{ env "attr.unique.network.ip-address" }}:8500'
+      services: ['nomad','nomad-client']
+    relabel_configs:
+      - source_labels: ['__meta_consul_tags']
+        regex: .*,http,.*
+        action: keep
+
+  - job_name: traefik
+    metrics_path: /metrics
+    consul_sd_configs:
+    - server: '{{ env "attr.unique.network.ip-address" }}:8500'
+      services: ['traefik-api']
 EOH
 
         change_mode   = "signal"
@@ -58,6 +66,26 @@ EOH
 
         network {
           mbits = 10
+
+          port "prometheus_ui" {}
+        }
+      }
+
+      service {
+        name = "prometheus"
+        port = "prometheus_ui"
+
+        tags = [
+          "traefik.enable=true",
+          "traefik.tcp.routers.prometheus.entrypoints=prometheus",
+          "traefik.tcp.routers.prometheus.rule=HostSNI(`*`)"
+        ]
+
+        check {
+          type     = "http"
+          path     = "/-/healthy"
+          interval = "10s"
+          timeout  = "2s"
         }
       }
     }

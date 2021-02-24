@@ -1,5 +1,7 @@
 advertise_addr = "IP_ADDRESS"
 
+datacenter = "DATACENTER"
+
 bind_addr = "0.0.0.0"
 
 bootstrap_expect = SERVER_COUNT

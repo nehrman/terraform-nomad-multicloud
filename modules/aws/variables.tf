@@ -20,6 +20,12 @@ variable "region" {
   default     = "eu-west-1"
 }
 
+variable "datacenter" {
+  description = "The AWS Datacenter to deploy into."
+  type        = string
+  default     = "aws-dc"
+}
+
 variable "availability_zones" {
   description = "The AWS region AZs to deploy into."
   type        = list(string)

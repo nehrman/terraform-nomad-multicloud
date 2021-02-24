@@ -22,6 +22,7 @@ NODE_CLASS=$3
 # Consul
 sed -i "s/IP_ADDRESS/$IP_ADDRESS/g" $CONFIGDIR/consul_client.hcl
 sed -i "s/RETRY_JOIN/$RETRY_JOIN/g" $CONFIGDIR/consul_client.hcl
+sed -i "s/DATACENTER/$DATACENTER/g" $CONFIGDIR/consul_client.hcl
 sudo cp $CONFIGDIR/consul_client.hcl $CONSULCONFIGDIR/consul.hcl
 sudo cp $CONFIGDIR/consul_$CLOUD.service /etc/systemd/system/consul.service
 
@@ -47,6 +48,8 @@ if [[ `wget -S --spider $NOMAD_BINARY  2>&1 | grep 'HTTP/1.1 200 OK'` ]]; then
 fi
 
 sed -i "s/NODE_CLASS/\"$NODE_CLASS\"/g" $CONFIGDIR/nomad_client.hcl
+sed -i "s/REGION/$REGION/g" $CONFIGDIR/nomad_client.hcl
+sed -i "s/DATACENTER/$DATACENTER/g" $CONFIGDIR/nomad_client.hcl
 sudo cp $CONFIGDIR/nomad_client.hcl $NOMADCONFIGDIR/nomad.hcl
 sudo cp $CONFIGDIR/nomad.service /etc/systemd/system/nomad.service
 

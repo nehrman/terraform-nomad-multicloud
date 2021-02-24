@@ -4,6 +4,7 @@ data "template_file" "user_data_server" {
   vars = {
     server_count  = var.server_count
     region        = var.region
+    datacenter    = var.datacenter
     retry_join    = var.retry_join
     nomad_binary  = var.nomad_binary
   }
@@ -13,7 +14,8 @@ data "template_file" "user_data_client" {
   template = file("${path.module}/templates/user-data-client.sh")
 
   vars = {
-    region        = var.region 
+    region        = var.region
+    datacenter    = var.datacenter
     nomad_binary  = var.nomad_binary
     retry_join    = var.retry_join
     node_class    = "hashistack"

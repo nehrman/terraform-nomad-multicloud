@@ -1,8 +1,8 @@
-####
-#
-# AWS Variables  
-#
-#
+#################
+#               #
+# AWS Variables #
+#               #
+#################
 
 variable "aws_region" {
   type = string
@@ -14,16 +14,17 @@ variable "aws_instance_type" {
   default = "t2.micro"
 }
 
-variable "owner" {
-  type = string
-  default = "neh"
-}
+###################
+#                 #
+# Azure Variables #
+#                 #
+###################
 
 variable "client_id" {
-  default = ""
+  default = "3feca6b7-0835-4f5f-89b2-815a6fa75211"
 }
 variable "client_secret" {
-  default = ""
+  default = "FN7RS8AwF.___9l5GaQMrvTxQ99i5D1~2r"
 }
 
 variable "resource_group" {
@@ -32,11 +33,11 @@ variable "resource_group" {
 }
 
 variable "subscription_id" {
-  default = ""
+  default = "14692f20-9428-451b-8298-102ed4e39c2a"
 }
 
 variable "tenant_id" {
-  default = ""
+  default = "0e3e2e88-8caf-41ca-b4da-e3b33b6c52ec"
 }
 
 variable "location" { 
@@ -61,8 +62,13 @@ variable "created_name" {
   default = "neh  "
 }
 
+variable "owner" {
+  type = string
+  default = "neh"
+}
 
-# CREATING AWS NOMAD / CONNSUL PACKER IMAGE 
+# CREATING AWS NOMAD / CONSUL PACKER IMAGE
+
 source "amazon-ebs" "ubuntu-image" {
   ami_name = "${var.owner}_{{timestamp}}"
   region = "${var.aws_region}"
@@ -88,6 +94,7 @@ source "amazon-ebs" "ubuntu-image" {
     Architecture  = "amd64"
     Created_Email = var.created_email
     Created_Name  = var.created_name
+    Owner         = var.owner
   }
 }
 
@@ -123,6 +130,7 @@ source "azure-arm" "ubuntu-image" {
     Architecture  = "amd64"
     Created_Email = var.created_email
     Created_Name  = var.created_name
+    Owner         = var.owner
   }
 
   client_id                         = "${var.client_id}"

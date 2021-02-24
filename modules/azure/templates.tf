@@ -4,6 +4,8 @@ data "template_file" "user_data_server" {
   template = file("${path.module}/templates/user-data-server.sh")
 
   vars = {
+    region        = var.region
+    datacenter    = var.datacenter
     server_count  = var.server_count
     retry_join    = "provider=azure tag_name=ConsulAutoJoin tag_value=auto-join subscription_id=${data.azurerm_subscription.main.subscription_id}"
     consul_binary = var.consul_binary
@@ -15,6 +17,8 @@ data "template_file" "user_data_client" {
   template = file("${path.module}/templates/user-data-client.sh")
 
   vars = {
+    region        = var.region
+    datacenter    = var.datacenter
     retry_join    = "provider=azure tag_name=ConsulAutoJoin tag_value=auto-join subscription_id=${data.azurerm_subscription.main.subscription_id}"
     consul_binary = var.consul_binary
     nomad_binary  = var.nomad_binary

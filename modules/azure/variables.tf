@@ -4,6 +4,18 @@ variable "location" {
   default     = "East US"
 }
 
+variable "region" {
+  description = "The Azure region to deploy to."
+  type        = string
+  default     = "az-europe"
+}
+
+variable "datacenter" {
+  description = "The Azure region to deploy to."
+  type        = string
+  default     = "az-dc"
+}
+
 variable "server_vm_size" {
   description = "The Azure VM size to use for servers."
   type        = string

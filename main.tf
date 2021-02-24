@@ -1,6 +1,6 @@
 module "aws_nomad" {
     source = "./modules/aws"
-    ami = "ami-0209ea39198b80568"
+    ami = "ami-0d01dfcf8028818d8    "
     key_name = "nehrman-key"
     owner_email = "nehrman@hashicorp.com"
     owner_name = "nehrman"
