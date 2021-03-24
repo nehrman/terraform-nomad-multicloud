@@ -1,5 +1,5 @@
 job "autoscaler" {
-  datacenters = ["dc1"]
+  datacenters = ["az-dc"]
 
   group "autoscaler" {
     count = 1

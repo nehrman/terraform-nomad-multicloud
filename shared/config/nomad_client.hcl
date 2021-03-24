@@ -11,6 +11,12 @@ telemetry {
   prometheus_metrics         = true
 }
 
+plugin "raw_exec" {
+  config = {
+    enabled = true
+  }
+}
+
 client {
   enabled    = true
   node_class = NODE_CLASS
@@ -20,8 +26,12 @@ client {
   }
 
   options {
-    "driver.raw_exec.enable"    = "1"
     "docker.privileged.enabled" = "true"
+  }
+
+  host_volume "cbr" {
+    path = "/cbr"
+    read_only = false
   }
 }
 
